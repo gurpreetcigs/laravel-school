@@ -8,10 +8,7 @@ function Thumbnail(props) {
     return (
         <VideoThumbnail
         videoUrl={props.url}
-        cors={true}
         thumbnailHandler={(thumbnail) => console.log(thumbnail)}
-        width={120}
-        height={80}
         />
     )
 }
