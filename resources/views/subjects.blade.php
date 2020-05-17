@@ -14,7 +14,17 @@
                     <div class="page-title-subheading">Videos for all subjects.
                     </div>
                 </div>
-            </div>   
+            </div>
+            @if(auth('admin')->check())
+                <div class="page-title-actions">
+                    <button type="button" data-toggle="tooltip" title="Add Video" data-placement="bottom" class="btn-shadow mr-3 btn btn-info" onclick="window.location.href = `{!! route('admin.subject.create', [ 'id' => $standardId ]) !!}`">
+                        <span class="btn-icon-wrapper pr-2 opacity-7">
+                            <i class="fa fa-plus fa-w-20"></i>
+                        </span>
+                        Add 
+                    </button>
+                </div>
+            @endif   
         </div>
     </div>
     <div class="row">
@@ -36,13 +46,13 @@
                         @if(count($subjects))
                             @foreach($subjects as $key => $subject)
                             <tr>
-                                <td scope="row"> {{ $subject->id }}</th>
+                                <td scope="row"> {{ $key+1 }}</th>
                                 <td>{{ $subject->name }}</td>
                                 <td>{{ $teacher }}</td>
                                 <td>{{ count($subject->videos()) }} </td>
                                 <td>
                                     @if(auth('admin')->check())
-                                    <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="window.location.href = `{!! route('admin.videos.index', [ 'id' => $subject->id]) !!}`">
+                                    <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="window.location.href = `{!! route('admin.videos.index', [ 'standard' => $standardId, 'id' => $subject->id]) !!}`">
                                     @elseif(auth('school')->check())
                                     <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="window.location.href = `{!! route('school.videos.index', [ 'id' => $subject->id]) !!}`">
                                     @else
@@ -53,6 +63,18 @@
                                         </span>
                                         View
                                     </button>
+                                    @if(auth('admin')->check())
+                                    <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-danger" onclick="$('#delete-subject-{{$subject->id}}').submit()">
+                                        <span class="btn-icon-wrapper pr-2 opacity-7">
+                                            <i class="fa fa-trash fa-w-20"></i>
+                                        </span>
+                                        Delete
+                                        <form method="POST" action="{{ route('admin.subject.destroy', ['id' => $standardId, 'subject' => $subject->id]) }}" id="delete-subject-{{$subject->id}}">
+                                            @csrf
+                                            @method("DELETE")
+                                        </form>
+                                    </button>
+                                    @endif 
                                 </td>
                             </tr>
                             @endforeach
@@ -64,9 +86,21 @@
                         </tbody>
 
                     </table>
+                    <br>
+                    @if(count($subjects))
+                        {{ $subjects->links() }}
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
+@if (session('status'))
+    @section('custom_script')
+        <script>
+        toastr.success("{!! session('status') !!}", 'Success', {timeOut: 3000})
+        </script>
+
+    @endsection
+@endif

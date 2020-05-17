@@ -19,8 +19,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'standard_id'
+        'name', 'username', 'email', 'password', 'standard_id'
     ];
+
 
     /**
      * The attributes that should be hidden for arrays.
@@ -43,4 +44,16 @@ class User extends Authenticatable
     public function standard(){
         return $this->hasOne('App\Standard', 'id', 'standard_id')->get()[0];
     }
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    // protected static function booted()
+    // {
+    //     static::created(function ($user) {
+            
+    //     });
+    // }
 }

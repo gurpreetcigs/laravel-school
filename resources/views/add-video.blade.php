@@ -22,7 +22,11 @@
             <div class="main-card mb-3 card">
             <div class="card-body">
                 <h5 class="card-title">Details</h5>
+                @if(auth('admin')->check())
+                <form method="POST" action="{{ route('admin.videos.store', [ 'standard' => $standardId, 'id' => $subjectName->id ]) }}" enctype="multipart/form-data">
+                @else
                 <form method="POST" action="{{ route('school.videos.store', [ 'id' => $subjectName->id ]) }}" enctype="multipart/form-data">
+                @endif
                     @csrf
                     <div class="position-relative row form-group"><label for="title" class="col-sm-2 col-form-label">Title</label>
                         <div class="col-sm-10">

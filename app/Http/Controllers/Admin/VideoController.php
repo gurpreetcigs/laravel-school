@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\School;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\{Video, Subject};
+use App\{Video, Subject, Standard};
 use Spatie\Permission\Models\Role;
 
 class VideoController extends Controller
@@ -19,8 +19,9 @@ class VideoController extends Controller
     {
         $url = 'https://s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com/' . env('AWS_BUCKET') . '/'; 
         $subjectId = request()->route('id');
+        $standardId = request()->route('standard');
         $videos = Video::where('subject_id', $subjectId)->paginate(5);
-        return view('videos', compact('videos', 'subjectId', 'url'));
+        return view('videos', compact('videos', 'subjectId', 'url', 'standardId'));
     }
 
     /**
@@ -31,7 +32,8 @@ class VideoController extends Controller
     public function create()
     {
         $subjectName = Subject::find(request()->route('id'));
-        return view('add-video', compact('subjectName'));
+        $standardId = request()->route('standard');
+        return view('add-video', compact('subjectName', 'standardId'));
     }
 
     /**
@@ -48,10 +50,11 @@ class VideoController extends Controller
             'uploaded_by' => 'required',
             'video' => 'required|mimetypes:video/avi,video/mpeg,video/mp4'
         ]);
-        $standardName = auth()->guard('school')->user()->standard()->name;
+
         $subjectId = request()->route('id');
+        $standardId = request()->route('standard');
+        $standardName = Standard::findorFail($standardId)->name;
         $subjectName = Subject::find($subjectId)->name;
-        
         $filePath = "";
         if ($request->hasFile('video')) {
             $file = $request->file('video');
@@ -64,7 +67,7 @@ class VideoController extends Controller
             $video->url = $filePath;
             $video->save();
         }
-        $url = route('school.videos.index', [ 'id' => $subjectId]);
+        $url = route('admin.videos.index', [ 'standard' => $standardId, 'id' => $subjectId]);
         return redirect($url)->with('status', 'Video uploaded successfully!');
     }
 
@@ -75,7 +78,7 @@ class VideoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, $videoId){
+    public function show($standardId, $id, $videoId){
         // dd(auth()->guard('school')->user()->can('Read Video'));
         $url = 'https://s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com/' . env('AWS_BUCKET') . '/';;
         $video = Video::findorFail($videoId);
@@ -88,11 +91,15 @@ class VideoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, $videoId)
+    public function destroy($standardId, $id, $videoId)
     {
         $video = Video::findorFail($videoId);        
         Storage::disk('s3')->delete($video->url);
         $video->delete();
-        return back()->withSuccess('Video was deleted successfully');
+        $subjectId = request()->route('id');
+        $standardId = request()->route('standard');
+        $url = route('admin.videos.index', [ 'standard' => $standardId, 'id' => $subjectId]);
+        return redirect($url)->with('status', 'Video deleted successfully!');
     }
 }
+

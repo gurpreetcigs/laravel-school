@@ -17,7 +17,12 @@
             </div>  
             @if(auth('admin')->check() || auth('school')->check())
                 <div class="page-title-actions">
+                    @if(auth('admin')->check())
+                    <button type="button" data-toggle="tooltip" title="Add Video" data-placement="bottom" class="btn-shadow mr-3 btn btn-info" onclick="window.location.href = `{!! route('admin.videos.create', [ 'standard'=> $standardId, 'id' => $subjectId ]) !!}`">
+                    @else
                     <button type="button" data-toggle="tooltip" title="Add Video" data-placement="bottom" class="btn-shadow mr-3 btn btn-info" onclick="window.location.href = `{!! route('school.videos.create', [ 'id' => $subjectId ]) !!}`">
+                    @endif
+                    
                         <span class="btn-icon-wrapper pr-2 opacity-7">
                             <i class="fa fa-plus fa-w-20"></i>
                         </span>
@@ -51,9 +56,34 @@
                                     <td>{{ $video->description }}</td>
                                     <td>{{ $video->uploaded_by }}</td>
                                     @if(auth('admin')->check())
-                                    <td><div class="thumbnail" id="video-{{ $key+1 }}" data-name="{{ $key+1 }}" data-url="{{ $url.$video->url }}" onclick="window.location.href = `{!! route('admin.videos.show', [ 'id' => $subjectId, 'video' => $video->id ]) !!}`"></div></td>
+                                    <td>
+                                        <div class="thumbnail" id="video-{{ $key+1 }}" data-name="{{ $key+1 }}" data-url="{{ $url.$video->url }}" onclick="window.location.href = `{!! route('admin.videos.show', [ 'standard'=> $standardId, 'id' => $subjectId, 'video' => $video->id ]) !!}`">
+                                        </div>
+                                        <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-danger" onclick="$('#delete-video-{{$video->id}}').submit()">
+                                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                                <i class="fa fa-trash fa-w-20"></i>
+                                            </span>
+                                            Delete
+                                            <form method="POST" action="{{ route('admin.videos.destroy', [ 'standard'=> $standardId, 'id' => $subjectId, 'video' => $video->id ]) }}" id="delete-video-{{$video->id}}">
+                                                @csrf
+                                                @method("DELETE")
+                                            </form>
+                                        </button>
+                                    </td>
                                     @elseif(auth('school')->check())
-                                    <td><div class="thumbnail" id="video-{{ $key+1 }}" data-name="{{ $key+1 }}" data-url="{{ $url.$video->url }}" onclick="window.location.href = `{!! route('school.videos.show', [ 'id' => $subjectId, 'video' => $video->id ]) !!}`"></div></td>
+                                    <td>
+                                        <div class="thumbnail" id="video-{{ $key+1 }}" data-name="{{ $key+1 }}" data-url="{{ $url.$video->url }}" onclick="window.location.href = `{!! route('school.videos.show', [ 'id' => $subjectId, 'video' => $video->id ]) !!}`"></div>
+                                        <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-danger" onclick="$('#delete-video-{{$video->id}}').submit()">
+                                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                                <i class="fa fa-trash fa-w-20"></i>
+                                            </span>
+                                            Delete
+                                            <form method="POST" action="{{ route('school.videos.destroy', [ 'id' => $subjectId, 'video' => $video->id ]) }}" id="delete-video-{{$video->id}}">
+                                                @csrf
+                                                @method("DELETE")
+                                            </form>
+                                        </button>
+                                    </td>
                                     @else
                                     <td><div class="thumbnail" id="video-{{ $key+1 }}" data-name="{{ $key+1 }}" data-url="{{ $url.$video->url }}" onclick="window.location.href = `{!! route('videos.show', [ 'id' => $subjectId, 'video' => $video->id ]) !!}`"></div></td>
                                     @endif
@@ -67,6 +97,10 @@
                         @endif
                         </tbody>
                     </table>
+                    <br>
+                    @if(count($videos))
+                        {{ $videos->links() }}
+                    @endif
                 </div>
             </div>
         </div>

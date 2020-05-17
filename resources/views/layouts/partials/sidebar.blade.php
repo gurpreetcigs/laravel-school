@@ -31,13 +31,15 @@
     </div>    <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                <!-- <li class="app-sidebar__heading">Dashboards</li>
+                @if(auth('admin')->check())
+                <li class="app-sidebar__heading">Statistic</li>
                 <li>
-                    <a href="index.html" class="mm-active">
+                    <a href="{{ route('admin.dashboard') }}" class="mm-active">
                         <i class="metismenu-icon pe-7s-rocket"></i>
-                        Dashboard Example 1
+                        Dashboard
                     </a>
-                </li> -->
+                </li>
+                @endif
                 <li class="app-sidebar__heading">Study Material</li>
                 <li>
                     <a href="#">
@@ -48,9 +50,9 @@
                     <ul>
                         <li>
                             @if(auth('admin')->check())
-                            <a href="{{ route('admin.subjects') }}">
+                            <a href="{{ route('admin.standard.index') }}">
                                 <i class="metismenu-icon"></i>
-                                Video
+                                Standard
                             </a>
                             @elseif(auth('school')->check())
                             <a href="{{ route('school.subjects') }}">
@@ -66,6 +68,39 @@
                         </li>
                     </ul>
                 </li>
+
+                @if(auth('admin')->check())
+                <li>
+                    <a href="#">
+                        <i class="metismenu-icon pe-7s-user"></i>
+                        Student
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('admin.student.index') }}">
+                                <i class="metismenu-icon"></i>
+                                List
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="metismenu-icon pe-7s-home"></i>
+                        School
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('admin.school.index') }}">
+                                <i class="metismenu-icon"></i>
+                                List
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @endif
                 
             </ul>
         </div>

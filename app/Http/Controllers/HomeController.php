@@ -33,7 +33,7 @@ class HomeController extends Controller
      */
     public function getSubjects(){
         $currentStudent = auth()->user();
-        $subjects = $currentStudent->standard()->subjects()->get();
+        $subjects = $currentStudent->standard()->subjects()->paginate(5);
         $teacher = "{$currentStudent->name}";
         return view('subjects', compact('subjects', 'teacher'));
     }

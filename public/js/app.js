@@ -72886,12 +72886,9 @@ __webpack_require__.r(__webpack_exports__);
 function Thumbnail(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_video_thumbnail__WEBPACK_IMPORTED_MODULE_2___default.a, {
     videoUrl: props.url,
-    cors: true,
     thumbnailHandler: function thumbnailHandler(thumbnail) {
       return console.log(thumbnail);
-    },
-    width: 120,
-    height: 80
+    }
   });
 }
 

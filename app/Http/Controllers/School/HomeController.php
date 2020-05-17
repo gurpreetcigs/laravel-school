@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\School;
 
 use App\Http\Controllers\Controller;
-// use Illuminate\Support\Facades\Auth;
+
 
 class HomeController extends Controller
 {
@@ -28,6 +28,7 @@ class HomeController extends Controller
     public function index() {
         return view('home');
     }
+
     /**
      * Get the List of subjects.
      *
@@ -35,7 +36,7 @@ class HomeController extends Controller
      */
     public function getSubjects(){
         $currentSchool = auth()->guard('school')->user();
-        $subjects = $currentSchool->standard()->subjects()->get();
+        $subjects = $currentSchool->standard()->subjects()->paginate(5);
         $teacher = "{$currentSchool->name}";
         return view('subjects', compact('subjects', 'teacher'));
     }
