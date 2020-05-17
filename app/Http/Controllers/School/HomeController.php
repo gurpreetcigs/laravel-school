@@ -35,10 +35,11 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getSubjects(){
+		$standardId = 0; 
         $currentSchool = auth()->guard('school')->user();
         $subjects = $currentSchool->standard()->subjects()->paginate(5);
         $teacher = "{$currentSchool->name}";
-        return view('subjects', compact('subjects', 'teacher'));
+        return view('subjects', compact('subjects', 'teacher', 'standardId'));
     }
 
 

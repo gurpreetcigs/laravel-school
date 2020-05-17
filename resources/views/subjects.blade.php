@@ -17,7 +17,7 @@
             </div>
             @if(auth('admin')->check())
                 <div class="page-title-actions">
-                    <button type="button" data-toggle="tooltip" title="Add Video" data-placement="bottom" class="btn-shadow mr-3 btn btn-info" onclick="window.location.href = `{!! route('admin.subject.create', [ 'id' => $standardId ]) !!}`">
+                    <button type="button" data-toggle="tooltip" title="Add Video" data-placement="bottom" class="btn-shadow mr-3 btn btn-info" onclick="window.location.href = `{!! route('admin.subject.create', [ 'id' => $standardId ?? 0 ]) !!}`">
                         <span class="btn-icon-wrapper pr-2 opacity-7">
                             <i class="fa fa-plus fa-w-20"></i>
                         </span>

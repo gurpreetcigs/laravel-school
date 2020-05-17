@@ -48,7 +48,7 @@ class VideoController extends Controller
             'title' => 'required',
             'description' => 'required',
             'uploaded_by' => 'required',
-            'video' => 'required|mimetypes:video/avi,video/mpeg,video/mp4'
+            'video' => 'file|size:500000|required|mimetypes:video/avi,video/mpeg,video/mp4'
         ]);
 
         $subjectId = request()->route('id');
