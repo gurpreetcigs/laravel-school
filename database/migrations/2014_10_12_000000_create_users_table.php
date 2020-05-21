@@ -23,7 +23,6 @@ class CreateUsersTable extends Migration
             $table->integer('standard_id')->default(0);
             $table->rememberToken();
             $table->timestamps();
-            $table->timestamp('expiry_at')->nullable();
         });
     }
 

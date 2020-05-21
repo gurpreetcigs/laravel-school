@@ -19,7 +19,7 @@ class VideoController extends Controller
     {
         $url = 'https://s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com/' . env('AWS_BUCKET') . '/'; 
         $subjectId = request()->route('id');
-        $videos = Video::where('subject_id', $subjectId)->paginate(5);
+        $videos = Video::where(['subject_id' => $subjectId, 'status' => '1'])->paginate(5);
         return view('videos', compact('videos', 'subjectId', 'url'));
     }
 

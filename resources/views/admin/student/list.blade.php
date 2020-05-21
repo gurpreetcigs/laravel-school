@@ -49,7 +49,7 @@
                                     <th scope="row">{{ $key+1 }}</th>
                                     <td>{{ $student->name }}</td>
                                     <td>{{ $student->email }}</td>
-                                    <td><b style="color: green">Active</b></td>
+                                    <td>@if($student->expires_at <= $today) <b style="color: red">Expired</b> @else <b style="color: green">Active</b> @endif</td>
                                     <td>
                                         <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="window.location.href = `{!! route('admin.student.edit', [ 'student' => $student->id]) !!}`">
                                             <span class="btn-icon-wrapper pr-2 opacity-7">
@@ -68,6 +68,15 @@
                                                 @method("DELETE")
                                             </form>
                                         </button>
+
+                                        @if($student->expires_at <= $today)
+                                        <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-success" onclick="window.location.href = `{!! route('admin.student.activate-view', [ 'student' => $student->id]) !!}`">
+                                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                                <i class="fa fa-check fa-w-20"></i>
+                                            </span>
+                                            Activate
+                                        </button>
+                                        @endif
                                     </td>
                                     
                                 </tr>

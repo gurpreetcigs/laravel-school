@@ -20,7 +20,7 @@ class VideoController extends Controller
         $url = 'https://s3.' . env('AWS_DEFAULT_REGION') . '.amazonaws.com/' . env('AWS_BUCKET') . '/'; 
         $subjectId = request()->route('id');
         $standardId = request()->route('standard');
-        $videos = Video::where('subject_id', $subjectId)->paginate(5);
+        $videos = Video::where(['subject_id' => $subjectId])->paginate(5);
         return view('videos', compact('videos', 'subjectId', 'url', 'standardId'));
     }
 
@@ -48,7 +48,7 @@ class VideoController extends Controller
             'title' => 'required',
             'description' => 'required',
             'uploaded_by' => 'required',
-            'video' => 'file|size:500000|required|mimetypes:video/avi,video/mpeg,video/mp4'
+            'video' => 'required|mimetypes:video/avi,video/mpeg,video/mp4|max:500000'
         ]);
 
         $subjectId = request()->route('id');
@@ -65,6 +65,7 @@ class VideoController extends Controller
             $video->fill($request->all());
             $video->subject_id = $subjectId;
             $video->url = $filePath;
+            $video->status = '1';
             $video->save();
         }
         $url = route('admin.videos.index', [ 'standard' => $standardId, 'id' => $subjectId]);
@@ -100,6 +101,23 @@ class VideoController extends Controller
         $standardId = request()->route('standard');
         $url = route('admin.videos.index', [ 'standard' => $standardId, 'id' => $subjectId]);
         return redirect($url)->with('status', 'Video deleted successfully!');
+    }
+
+    /**
+     * Activate the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function activate($standardId, $id, $videoId)
+    {
+        $video = Video::findorFail($videoId);
+        $video->status = '1';
+        $video->save();
+        $subjectId = request()->route('id');
+        $standardId = request()->route('standard');
+        $url = route('admin.videos.index', [ 'standard' => $standardId, 'id' => $subjectId]);
+        return redirect($url)->with('status', 'Video Activated successfully!');
     }
 }
 

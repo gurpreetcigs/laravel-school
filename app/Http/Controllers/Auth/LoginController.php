@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 class LoginController extends Controller
 {
     /*
@@ -41,4 +42,33 @@ class LoginController extends Controller
     public function username(){
         return 'username';
     }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        // $credentials = $request->only('username', 'password');
+        if(auth()->user()->expires_at <= Carbon::now()){
+            auth('web')->logout();
+            return redirect('/')->with('error', 'Your account has been expired please contact admin to approve!');
+        }
+            
+    }
+
+    /**
+     * Handle an authentication attempt.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return Response
+     */
+    // public function authenticated(Request $request, $user)
+    // {
+    //     
+    // }
 }

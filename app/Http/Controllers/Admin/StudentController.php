@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\{ User, Standard };
+use Carbon\Carbon;
 
 class StudentController extends Controller
 {
@@ -17,7 +18,8 @@ class StudentController extends Controller
     public function index()
     {
         $students = User::paginate(5);
-        return view('admin.student.list', compact('students'));
+        $today = Carbon::now();
+        return view('admin.student.list', compact('students', 'today'));
     }
 
     /**
@@ -125,5 +127,48 @@ class StudentController extends Controller
         $student->delete();
         $url = route('admin.student.index');
         return redirect($url)->with('status', 'Student Deleted successfully!');
+    }
+
+    /**
+     * Show Activate Page.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function viewActivatePage($id){
+        $standards = Standard::all();
+        $student = User::findorFail($id);
+        return view('admin.student.active', compact('student', 'standards'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function activate(Request $request, $id)
+    {
+        $this->validate($request, [
+            'username' => 'required|max:255|unique:users',
+            'standard_id' => 'required'
+        ]);
+
+        $data = $request->all();
+        
+        $user = User::findorFail($id);
+
+        $user->username = $data['username'];
+
+        $user->expires_at = Carbon::now()->addYear();
+
+        $user->standard_id = $data['standard_id'];
+
+        $user->save();
+
+        $url = route('admin.student.index');
+        return redirect($url)->with('status', 'Student Activated successfully!');
     }
 }

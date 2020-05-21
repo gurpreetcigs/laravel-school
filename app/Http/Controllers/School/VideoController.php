@@ -46,7 +46,7 @@ class VideoController extends Controller
             'title' => 'required',
             'description' => 'required',
             'uploaded_by' => 'required',
-            'video' => 'file|size:500000|required|mimetypes:video/avi,video/mpeg,video/mp4'
+            'video' => 'required|mimetypes:video/avi,video/mpeg,video/mp4|max:500000'
         ]);
         $standardName = auth()->guard('school')->user()->standard()->name;
         $subjectId = request()->route('id');

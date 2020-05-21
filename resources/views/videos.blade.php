@@ -44,6 +44,9 @@
                                 <th>Title</th>
                                 <th>Description</th>
                                 <th>Uploaded By</th>
+                                @if(auth('admin')->check() || auth('school')->check())
+                                <th>Status</th>
+                                @endif
                                 <th>Video</th>
                             </tr>
                         </thead>
@@ -55,6 +58,9 @@
                                     <td>{{ $video->title }}</td>
                                     <td>{{ $video->description }}</td>
                                     <td>{{ $video->uploaded_by }}</td>
+                                    @if(auth('admin')->check() || auth('school')->check())
+                                    <td>@if($video->status == '0') <b style="color: red">Pending Approval</b> @else <b style="color: green">Active</b> @endif</td>
+                                    @endif
                                     @if(auth('admin')->check())
                                     <td>
                                         <div class="thumbnail" id="video-{{ $key+1 }}" data-name="{{ $key+1 }}" data-url="{{ $url.$video->url }}" onclick="window.location.href = `{!! route('admin.videos.show', [ 'standard'=> $standardId, 'id' => $subjectId, 'video' => $video->id ]) !!}`">
@@ -69,6 +75,14 @@
                                                 @method("DELETE")
                                             </form>
                                         </button>
+                                        @if($video->status == '0')
+                                        <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-success" onclick="window.location.href=`{{ route('admin.videos.active', [ 'standard'=> $standardId, 'id' => $subjectId, 'video' => $video->id ]) }}`">
+                                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                                <i class="fa fa-check fa-w-20"></i>
+                                            </span>
+                                            Activate
+                                        </button>
+                                        @endif
                                     </td>
                                     @elseif(auth('school')->check())
                                     <td>

@@ -84,3 +84,11 @@
     </div>
 </div>
 @endsection
+@if (session('error'))
+    @section('custom_script')
+        <script>
+        toastr.error("{!! session('error') !!}", 'Error', {timeOut: 3000})
+        </script>
+
+    @endsection
+@endif

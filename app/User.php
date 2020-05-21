@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -50,10 +51,10 @@ class User extends Authenticatable
      *
      * @return void
      */
-    // protected static function booted()
-    // {
-    //     static::created(function ($user) {
-            
-    //     });
-    // }
+    protected static function booted()
+    {
+        static::saving(function ($user) {
+            $user->expires_at = Carbon::now()->addYear();
+        });
+    }
 }

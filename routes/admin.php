@@ -24,7 +24,12 @@ Route::group(['namespace' => 'Admin', 'as'=>'admin.'], function() {
     Route::get('email/verify/{id}/{hash}','Auth\VerificationController@verify')->name('verification.verify');
     Route::resource('/standard', 'StandardController')->name('*', 'standard');
     Route::resource('/standard/{id}/subject', 'SubjectController')->name('*', 'subject');
+    
+    Route::get('/standard/{standard}/subject/{id}/videos/{video}/activate', 'VideoController@activate')->name('videos.active');
+
     Route::resource('/standard/{standard}/subject/{id}/videos', 'VideoController')->name('*', 'videos');
+    Route::get('/student/{student}/active', 'StudentController@viewActivatePage')->name('student.activate-view');
+    Route::put('/student/{student}/active', 'StudentController@activate')->name('student.activate');
     Route::resource('student', 'StudentController')->name('*', 'student');
     Route::resource('school', 'SchoolController')->name('*', 'school');
 });
