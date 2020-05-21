@@ -11,7 +11,7 @@
                     </i>
                 </div>
                 <div> Videos
-                    <div class="page-title-subheading">Videos for Physics.
+                    <div class="page-title-subheading">Videos for {{ $subjectName->name }}.
                     </div>
                 </div>
             </div>  

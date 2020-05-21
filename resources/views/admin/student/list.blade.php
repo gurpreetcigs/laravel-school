@@ -36,7 +36,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
+                                <th>Username</th>
                                 <th>Email</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -47,7 +47,7 @@
                             @foreach($students as $key => $student)
                                 <tr>
                                     <th scope="row">{{ $key+1 }}</th>
-                                    <td>{{ $student->name }}</td>
+                                    <td>{{ $student->username }}</td>
                                     <td>{{ $student->email }}</td>
                                     <td>@if($student->expires_at <= $today) <b style="color: red">Expired</b> @else <b style="color: green">Active</b> @endif</td>
                                     <td>
