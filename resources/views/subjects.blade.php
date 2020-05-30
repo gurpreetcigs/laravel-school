@@ -37,7 +37,6 @@
                             <th>#</th>
                             <th>Subject</th>
                             <th>Teacher</th>
-                            <th>Videos</th>
                             <th style="text-align:left">Action</th>
                         </tr>
                         </thead>
@@ -49,20 +48,47 @@
                                 <td scope="row"> {{ $key+1 }}</th>
                                 <td>{{ $subject->name }}</td>
                                 <td>{{ $teacher }}</td>
-                                <td>{{ count($subject->videos()) }} </td>
                                 <td>
                                     @if(auth('admin')->check())
                                     <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="window.location.href = `{!! route('admin.videos.index', [ 'standard' => $standardId, 'id' => $subject->id]) !!}`">
-                                    @elseif(auth('school')->check())
-                                    <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="window.location.href = `{!! route('school.videos.index', [ 'id' => $subject->id]) !!}`">
-                                    @else
-                                    <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="window.location.href = `{!! route('videos.index', [ 'id' => $subject->id]) !!}`">
-                                    @endif 
                                         <span class="btn-icon-wrapper pr-2 opacity-7">
                                             <i class="fa fa-eye fa-w-20"></i>
                                         </span>
-                                        View
+                                        View Videos
                                     </button>
+                                    <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="window.location.href = `{!! route('admin.documents.index', [ 'standard' => $standardId, 'id' => $subject->id]) !!}`">
+                                        <span class="btn-icon-wrapper pr-2 opacity-7">
+                                            <i class="fa fa-eye fa-w-20"></i>
+                                        </span>
+                                        View Assignment
+                                    </button>
+                                    @elseif(auth('school')->check())
+                                    <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="window.location.href = `{!! route('school.videos.index', [ 'id' => $subject->id]) !!}`">
+                                        <span class="btn-icon-wrapper pr-2 opacity-7">
+                                            <i class="fa fa-eye fa-w-20"></i>
+                                        </span>
+                                        View Videos
+                                    </button>
+                                    <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="window.location.href = `{!! route('school.documents.index', [ 'id' => $subject->id]) !!}`">
+                                        <span class="btn-icon-wrapper pr-2 opacity-7">
+                                            <i class="fa fa-eye fa-w-20"></i>
+                                        </span>
+                                        View Assignment
+                                    </button>
+                                    @else
+                                    <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="window.location.href = `{!! route('videos.index', [ 'id' => $subject->id]) !!}`">
+                                        <span class="btn-icon-wrapper pr-2 opacity-7">
+                                            <i class="fa fa-eye fa-w-20"></i>
+                                        </span>
+                                        View Videos
+                                    </button>
+                                    <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="window.location.href = `{!! route('documents.index', ['id' => $subject->id]) !!}`">
+                                        <span class="btn-icon-wrapper pr-2 opacity-7">
+                                            <i class="fa fa-eye fa-w-20"></i>
+                                        </span>
+                                        View Assignment
+                                    </button>
+                                    @endif 
                                     @if(auth('admin')->check())
                                     <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-danger" onclick="$('#delete-subject-{{$subject->id}}').submit()">
                                         <span class="btn-icon-wrapper pr-2 opacity-7">

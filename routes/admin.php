@@ -28,6 +28,11 @@ Route::group(['namespace' => 'Admin', 'as'=>'admin.'], function() {
     Route::get('/standard/{standard}/subject/{id}/videos/{video}/activate', 'VideoController@activate')->name('videos.active');
 
     Route::resource('/standard/{standard}/subject/{id}/videos', 'VideoController')->name('*', 'videos');
+
+    Route::get('/standard/{standard}/subject/{id}/documents/{document}/activate', 'DocumentController@activate')->name('documents.active');
+    Route::get('/standard/{standard}/subject/{id}/documents/{document}/download', 'DocumentController@download')->name('documents.download');
+    Route::resource('/standard/{standard}/subject/{id}/documents', 'DocumentController')->name('*', 'documents');
+
     Route::get('/student/{student}/active', 'StudentController@viewActivatePage')->name('student.activate-view');
     Route::put('/student/{student}/active', 'StudentController@activate')->name('student.activate');
     Route::resource('student', 'StudentController')->name('*', 'student');
