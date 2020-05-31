@@ -107,9 +107,9 @@
                                     </td>
                                     @else
                                     <td>
-                                        <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-danger" onclick="downloadURI(`{{ $url.$document->url }}`)">
+                                        <button type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-info" onclick="downloadURI(`{{ $url.$document->url }}`)">
                                             <span class="btn-icon-wrapper pr-2 opacity-7">
-                                                <i class="fa fa-trash fa-w-20"></i>
+                                                <i class="fa fa-download fa-w-20"></i>
                                             </span>
                                             Download
                                         </button>
